@@ -1,5 +1,5 @@
 const Utilities = require("../utils/Utilities");
-const UserRepository = require("../repositories/UserRepository");
+const User = require("../models/User");
 
 const userRoute = app => {
   app
@@ -7,12 +7,16 @@ const userRoute = app => {
     .get((req, res) => {
       var id = req.params.id;
       if (Utilities.isIdValid(id)) {
-        let user = UserRepository.getUserById(id);
-        console.log(user);
-        return res.send(JSON.stringify(user));
+        User.getUserById(id, result => {
+          res.send(JSON.stringify(result));
+        });
       }
     })
-    .post((req, res) => {});
+    .post((req, res) => {
+      var user = res.body.FIRST_NAME;
+      console.log(user.FIRST_NAME);
+      res.send(user);
+    });
 };
 
 module.exports = userRoute;
