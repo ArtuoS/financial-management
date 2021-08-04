@@ -13,7 +13,18 @@ class User {
     return connection;
   }
 
-  static getUserById(id, callback) {
+  static getAll(callback) {
+    let connection = this.connection();
+    let sql = `SELECT * FROM USERS`;
+    connection.query(sql, (error, result, fileds) => {
+      if (error) throw error;
+      callback(result);
+    });
+
+    connection.end();
+  }
+
+  static getById(id, callback) {
     let connection = this.connection();
     if (Utilities.isIdValid(id)) {
       let sql = `SELECT * FROM USERS WHERE ID = ${id}`;
@@ -26,16 +37,25 @@ class User {
     connection.end();
   }
 
-  static createUser(user) {
+  static create(user, callback) {
     let connection = this.connection();
-    let sql = `INSERT INTO USERS (FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, SALARY) VALUES (${user.FIRST_NAME}, ${user.LAST_NAME}, ${user.EMAIL}, ${user.PASSWORD}, ${user.SALARY})`;
-
+    let sql = `INSERT INTO USERS (FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, SALARY) VALUES ("${user.first_name}", "${user.last_name}", "${user.email}", "${user.password}", ${user.salary})`;
+    console.log(sql);
     connection.query(sql, (error, result, fields) => {
       if (error) throw error;
       callback(result);
     });
 
     connection.end();
+  }
+
+  static update(user, callback) {
+    let connection = this.connection();
+    let sql = `UPDATE USERS SET ? WHERE ID = ${user.ID}`;
+    connection.query(sql, [user], (error, result, fields) => {
+      if (error) throw error;
+      callback(result);
+    });
   }
 }
 

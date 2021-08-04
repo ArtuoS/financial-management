@@ -3,19 +3,31 @@ const User = require("../models/User");
 
 const userRoute = app => {
   app
-    .route("/user/:id")
+    .route("/user/:id?")
     .get((req, res) => {
       var id = req.params.id;
       if (Utilities.isIdValid(id)) {
-        User.getUserById(id, result => {
-          res.send(JSON.stringify(result));
+        User.getById(id, result => {
+          res.json(result);
+        });
+      } else {
+        User.getAll(result => {
+          res.json(result);
         });
       }
     })
     .post((req, res) => {
-      var user = res.body.FIRST_NAME;
-      console.log(user.FIRST_NAME);
+      var user = req.body;
+      User.create(user, result => {
+        res.status(200);
+      });
       res.send(user);
+    })
+    .put((req, res) => {
+      var user = req.body;
+      User.update(user, result => {
+        res.status(200);
+      });
     });
 };
 
