@@ -28,8 +28,7 @@ class User {
     let connection = this.connection();
     if (Utilities.isIdValid(id)) {
       let sql = `SELECT * FROM USERS WHERE ID = ${id}`;
-
-      connection.query(sql, (error, result, fields) => {
+      connection.query(sql, (error, result) => {
         if (error) throw error;
         callback(result);
       });
@@ -41,7 +40,7 @@ class User {
     let connection = this.connection();
     let sql = `INSERT INTO USERS (FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, SALARY) VALUES ("${user.first_name}", "${user.last_name}", "${user.email}", "${user.password}", ${user.salary})`;
     console.log(sql);
-    connection.query(sql, (error, result, fields) => {
+    connection.query(sql, (error, result) => {
       if (error) throw error;
       callback(result);
     });
@@ -49,10 +48,20 @@ class User {
     connection.end();
   }
 
-  static update(user, callback) {
+  static update(id, userUpdatedValues, callback) {
     let connection = this.connection();
-    let sql = `UPDATE USERS SET ? WHERE ID = ${user.ID}`;
-    connection.query(sql, [user], (error, result, fields) => {
+    let sql = `UPDATE USERS SET ? WHERE ID = ${id}`;
+    connection.query(sql, [userUpdatedValues], (error, result) => {
+      if (error) throw error;
+      callback(result);
+    });
+  }
+
+  static delete(id, callback) {
+    let connection = this.connection();
+    console.log(id, "asdasdasd");
+    let sql = `DELETE FROM USERS WHERE ID = ${id}`;
+    connection.query(sql, (error, result) => {
       if (error) throw error;
       callback(result);
     });

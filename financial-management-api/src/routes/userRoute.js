@@ -25,9 +25,18 @@ const userRoute = app => {
     })
     .put((req, res) => {
       var user = req.body;
-      User.update(user, result => {
+      var id = req.params.id;
+      User.update(id, user, result => {
         res.status(200);
       });
+    })
+    .delete((req, res) => {
+      var id = req.query.id;
+      if (Utilities.isIdValid(id)) {
+        User.delete(id, result => {
+          res.status(200).send("OK");
+        });
+      }
     });
 };
 
