@@ -28,6 +28,7 @@ class User {
     let connection = this.connection();
     if (Utilities.isIdValid(id)) {
       let sql = `SELECT * FROM USERS WHERE ID = ${id}`;
+
       connection.query(sql, (error, result) => {
         if (error) throw error;
         callback(result);
@@ -59,7 +60,6 @@ class User {
 
   static delete(id, callback) {
     let connection = this.connection();
-    console.log(id, "asdasdasd");
     let sql = `DELETE FROM USERS WHERE ID = ${id}`;
     connection.query(sql, (error, result) => {
       if (error) throw error;
